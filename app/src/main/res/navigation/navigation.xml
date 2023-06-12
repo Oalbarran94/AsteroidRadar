@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/asteroidPrincipal"
-        android:name="com.example.asteroidradarapp.AsteroidPrincipal"
+        android:name="com.example.asteroidradarapp.asteroiddata.AsteroidPrincipal"
         android:label="AsteroidPrincipal"
         tools:layout="@layout/fragment_asteroid_principal"/>
 </navigation>
