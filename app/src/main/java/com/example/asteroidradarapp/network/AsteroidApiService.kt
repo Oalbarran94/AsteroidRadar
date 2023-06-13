@@ -1,9 +1,13 @@
 package com.example.asteroidradarapp.network
 
+import android.util.Log
 import com.example.asteroidradarapp.Asteroid
+import com.example.asteroidradarapp.PictureOfDay
 import com.example.asteroidradarapp.repository.AsteroidEntity
+import com.example.asteroidradarapp.repository.PictureOfDayEntity
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -22,7 +26,10 @@ private val retrofit = Retrofit.Builder()
 
 interface AsteroidApiService {
     @GET("neo/rest/v1/feed")
-    suspend fun getAsteroidsData(@Query("START_DATE") startDate: String, @Query("END_DATE") endDate: String, @Query("API_KEY") apiKey: String): String
+    suspend fun getAsteroidsData(@Query("START_DATE") startDate: String, @Query("END_DATE") endDate: String, @Query("API_KEY") apiKey: String): ResponseBody
+
+    @GET("planetary/apod")
+    suspend fun getPictureOfDay(@Query("api_key") apiKey: String): PictureOfDay
 }
 
 object AsteroidApi {
@@ -33,6 +40,8 @@ object AsteroidApi {
 
 
 fun List<Asteroid>.asDatabaseModel(): Array<AsteroidEntity> {
+
+    Log.i("Transforming stuff to save to DB", "Hello")
     return map {
         AsteroidEntity(
             id = it.id,
@@ -45,4 +54,12 @@ fun List<Asteroid>.asDatabaseModel(): Array<AsteroidEntity> {
             isPotentiallyHazardous = it.isPotentiallyHazardous
         )
     }.toTypedArray()
+}
+
+fun PictureOfDay.asDatabaseModel(): PictureOfDayEntity {
+    return PictureOfDayEntity(
+        mediaType = this.mediaType,
+        title = this.title,
+        url = this.url
+    )
 }

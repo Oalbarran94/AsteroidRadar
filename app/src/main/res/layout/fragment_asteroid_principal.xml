@@ -12,22 +12,37 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.asteroidradarapp.asteroiddata.AsteroidPrincipal">
+        android:background="@color/app_background">
 
-
-        <TextView
-            android:id="@+id/text_login"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_margin="16sp"
-            android:layout_marginTop="16dp"
-            android:text="Hello"
-            android:textColor="@color/black"
+        <FrameLayout
+            android:id="@+id/activity_main_image_of_the_day_layout"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/activity_main_image_of_the_day"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:pictureOfDayUrl="@{viewModel.pictureOfDay}"
+                android:contentDescription="@{viewModel.pictureOfDay.title}"/>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_gravity="bottom"
+                android:background="#55010613"
+                android:text="@string/image_of_the_day" />
+        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

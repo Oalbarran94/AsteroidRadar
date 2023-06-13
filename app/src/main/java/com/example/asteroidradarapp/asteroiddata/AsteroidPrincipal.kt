@@ -13,13 +13,13 @@ import com.example.asteroidradarapp.databinding.FragmentAsteroidPrincipalBinding
 class AsteroidPrincipal : Fragment() {
 
     private val viewModel: AsteroidPrincipalViewModel by lazy {
-        ViewModelProvider(this)[AsteroidPrincipalViewModel::class.java]
+        ViewModelProvider(this, AsteroidPrincipalViewModel.Factory(requireActivity().application))[AsteroidPrincipalViewModel::class.java]
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentAsteroidPrincipalBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
 

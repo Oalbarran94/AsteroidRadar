@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.asteroidradarapp.Asteroid
+import com.example.asteroidradarapp.PictureOfDay
 import com.example.asteroidradarapp.repository.AsteroidRepository
 import com.example.asteroidradarapp.repository.getDatabase
 import kotlinx.coroutines.launch
@@ -21,8 +22,7 @@ class AsteroidPrincipalViewModel(application: Application) : AndroidViewModel(ap
         viewModelScope.launch {
             try {
                 repository.refreshAsteroids()
-
-                Log.i("result", repository.asteroids.toString())
+                repository.refreshPictureOfDay()
             } catch (e: Exception) {
                 Log.e("Error on view model", e.toString())
             }
@@ -32,8 +32,10 @@ class AsteroidPrincipalViewModel(application: Application) : AndroidViewModel(ap
     private val asteroids: LiveData<List<Asteroid>> = repository.asteroids
     var _asteroids: LiveData<List<Asteroid>> = repository.asteroids
 
+    val pictureOfDay: LiveData<PictureOfDay> = repository.pictureOfDay
+
     class Factory(val app: Application) : ViewModelProvider.Factory {
-        fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AsteroidPrincipalViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
                 return AsteroidPrincipalViewModel(app) as T
