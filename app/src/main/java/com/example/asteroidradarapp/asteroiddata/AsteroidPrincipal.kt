@@ -25,6 +25,10 @@ class AsteroidPrincipal : Fragment() {
 
         binding.viewModel = viewModel
 
+        binding.asteroidRecycler.adapter = AsteroidAdapter(AsteroidAdapter.OnClickListener {
+            viewModel.navigateToSelectedAsteroid(it)
+        })
+
         return binding.root
     }
 }

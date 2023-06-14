@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
-    Log.i("Utils", "Converting stuff")
     val nearEarthObjectsJson = jsonResult.getJSONObject("near_earth_objects")
 
     val asteroidList = ArrayList<Asteroid>()
