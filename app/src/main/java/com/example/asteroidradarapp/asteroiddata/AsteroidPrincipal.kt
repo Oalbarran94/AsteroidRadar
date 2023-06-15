@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.asteroidradarapp.databinding.FragmentAsteroidPrincipalBinding
 
 
@@ -28,6 +29,13 @@ class AsteroidPrincipal : Fragment() {
         binding.asteroidRecycler.adapter = AsteroidAdapter(AsteroidAdapter.OnClickListener {
             viewModel.navigateToSelectedAsteroid(it)
         })
+
+        viewModel.navigateToSelectedAsteroid.observe(viewLifecycleOwner) {
+            if (null != it) {
+                this.findNavController().navigate(AsteroidPrincipalDirections.actionAsteroidPrincipalToDetailFragment(it))
+                viewModel.displayAsteroidDetailsComplete()
+            }
+        }
 
         return binding.root
     }

@@ -9,5 +9,19 @@
         android:id="@+id/asteroidPrincipal"
         android:name="com.example.asteroidradarapp.asteroiddata.AsteroidPrincipal"
         android:label="AsteroidPrincipal"
-        tools:layout="@layout/fragment_asteroid_principal"/>
+        tools:layout="@layout/fragment_asteroid_principal">
+        <action
+            android:id="@+id/action_asteroidPrincipal_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.asteroidradarapp.detail.DetailFragment"
+        android:label="DetailFragment"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="selectedAsteroid"
+            app:argType="com.example.asteroidradarapp.Asteroid"/>
+    </fragment>
 </navigation>

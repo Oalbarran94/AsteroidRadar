@@ -44,12 +44,16 @@ class AsteroidPrincipalViewModel(application: Application) : AndroidViewModel(ap
 
     val pictureOfDay: LiveData<PictureOfDay> = repository.pictureOfDay
 
-    private val _navigateToSelectedAsteroid = MutableLiveData<Asteroid>()
-    val navigateToSelectedAsteroid: LiveData<Asteroid>
+    private val _navigateToSelectedAsteroid = MutableLiveData<Asteroid?>()
+    val navigateToSelectedAsteroid: LiveData<Asteroid?>
         get() = _navigateToSelectedAsteroid
 
     fun navigateToSelectedAsteroid(asteroid: Asteroid) {
         _navigateToSelectedAsteroid.value = asteroid
+    }
+
+    fun displayAsteroidDetailsComplete() {
+        _navigateToSelectedAsteroid.value = null
     }
 
     class Factory(val app: Application) : ViewModelProvider.Factory {
