@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.asteroidradarapp.Asteroid
+import com.example.asteroidradarapp.Constants
 import com.example.asteroidradarapp.PictureOfDay
+import com.example.asteroidradarapp.api.getLastDayToSearch
+import com.example.asteroidradarapp.api.getTodayDateToSearch
 import com.example.asteroidradarapp.api.parseAsteroidsJsonResult
 import com.example.asteroidradarapp.network.AsteroidApi
 import com.example.asteroidradarapp.network.asDatabaseModel
@@ -26,19 +29,16 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
 
     suspend fun refreshAsteroids(){
         withContext(Dispatchers.IO){
-
             try{
                 val asteroids = parseAsteroidsJsonResult(
                     JSONObject(
                         AsteroidApi.retrofitService.getAsteroidsData(
-                            "2023-06-12",
-                            "2023-06-14",
-                            "EfZZUhwn9m4lE958ThhBHzwyAK9IQYcQReKbUXtk"
+                            getTodayDateToSearch(),
+                            getLastDayToSearch(),
+                            Constants.API_KEY
                         ).string()
                     )
                 )
-
-                Log.e("Result from asteroids", asteroids.toString())
                 database.asteroidDao.insertAll(*asteroids.asDatabaseModel())
             } catch (e: Exception){
                 Log.e("AsteroidRepository", "Error saving asteroids: $e")

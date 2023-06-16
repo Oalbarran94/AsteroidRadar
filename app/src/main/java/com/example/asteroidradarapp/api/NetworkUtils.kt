@@ -2,6 +2,7 @@ package com.example.asteroidradarapp.api
 
 import android.util.Log
 import com.example.asteroidradarapp.Asteroid
+import com.example.asteroidradarapp.Constants
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,12 +48,22 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
     val formattedDateList = ArrayList<String>()
 
     val calendar = Calendar.getInstance()
-    for (i in 0..7) {
+    for (i in 0..Constants.DEFAULT_END_DATE_DAYS) {
         val currentTime = calendar.time
-        val dateFormat = SimpleDateFormat("YYYY-MM-dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
         formattedDateList.add(dateFormat.format(currentTime))
         calendar.add(Calendar.DAY_OF_YEAR, 1)
     }
 
     return formattedDateList
+}
+
+fun getLastDayToSearch() : String {
+    val calendar = Calendar.getInstance()
+    calendar.add(Calendar.DAY_OF_YEAR, 7)
+    return SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT).format(calendar.time)
+}
+
+fun getTodayDateToSearch() : String {
+    return SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT).format(Calendar.getInstance().time)
 }

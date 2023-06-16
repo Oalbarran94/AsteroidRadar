@@ -13,11 +13,14 @@ import com.example.asteroidradarapp.Asteroid
 @Dao
 interface AsteroidDao {
 
-    @Query("select * from asteroids_table ORDER BY id")
+    @Query("select * from asteroids_table ORDER BY closeApproachDate ASC")
     fun getAsteroids(): LiveData<List<AsteroidEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg asteroids: AsteroidEntity)
+
+    @Query("DELETE FROM asteroids_table WHERE closeApproachDate < :todaysDate")
+    fun deleteOldData(todaysDate: String)
 
 }
 
