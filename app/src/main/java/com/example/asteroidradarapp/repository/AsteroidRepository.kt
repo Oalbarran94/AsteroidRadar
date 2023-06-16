@@ -41,7 +41,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
                 )
                 database.asteroidDao.insertAll(*asteroids.asDatabaseModel())
             } catch (e: Exception){
-                Log.e("AsteroidRepository", "Error saving asteroids: $e")
+                Log.e("AsteroidRepository", "Error saving or getting asteroids: $e")
             }
 
         }
@@ -51,10 +51,10 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         withContext(Dispatchers.IO) {
             try {
                 database.pictureOfDayDao.insert(
-                    AsteroidApi.retrofitService.getPictureOfDay("EfZZUhwn9m4lE958ThhBHzwyAK9IQYcQReKbUXtk").asDatabaseModel()
+                    AsteroidApi.retrofitService.getPictureOfDay(Constants.API_KEY).asDatabaseModel()
                 )
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("AsteroidRepository", "Error getting or saving picture of the day: $e")
             }
         }
     }
