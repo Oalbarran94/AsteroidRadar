@@ -47,15 +47,11 @@ class AsteroidApplication : Application() {
         val refreshDataWork = OneTimeWorkRequest.Builder(RefreshDataWork::class.java).setConstraints(constraints).build()
         val deleteOlderDataWork = OneTimeWorkRequest.Builder(DeleteOlderDataWork::class.java).setConstraints(constraints).build()
 
-//        WorkManager.getInstance().enqueueUniquePeriodicWork(
-//            RefreshDataWork.WORK_NAME,
-//            ExistingPeriodicWorkPolicy.KEEP,
-//            repeatingRequest
-//        )
+        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+            RefreshDataWork.WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            repeatingRequest
+        )
 
-        WorkManager.getInstance(applicationContext)
-            .beginWith(deleteOlderDataWork)
-            .then(refreshDataWork)
-            .enqueue()
     }
 }
