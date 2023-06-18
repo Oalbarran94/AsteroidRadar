@@ -60,10 +60,10 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
 
 fun getLastDayToSearch() : String {
     val calendar = Calendar.getInstance()
-    calendar.add(Calendar.DAY_OF_YEAR, 7)
-    return SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT).format(calendar.time)
+    calendar.add(Calendar.DAY_OF_YEAR, Constants.DEFAULT_END_DATE_DAYS)
+    return SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault()).format(calendar.time)
 }
 
 fun getTodayDateToSearch() : String {
-    return SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT).format(Calendar.getInstance().time)
+    return SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault()).format(Calendar.getInstance().time)
 }
