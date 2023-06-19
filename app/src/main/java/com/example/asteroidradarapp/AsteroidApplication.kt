@@ -30,7 +30,6 @@ class AsteroidApplication : Application() {
     }
 
     private fun setupRecurringWork() {
-
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.UNMETERED)
             .setRequiresBatteryNotLow(true)
@@ -43,9 +42,6 @@ class AsteroidApplication : Application() {
             1,
             TimeUnit.DAYS
         ).setConstraints(constraints).build()
-
-        val refreshDataWork = OneTimeWorkRequest.Builder(RefreshDataWork::class.java).setConstraints(constraints).build()
-        val deleteOlderDataWork = OneTimeWorkRequest.Builder(DeleteOlderDataWork::class.java).setConstraints(constraints).build()
 
         WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
             RefreshDataWork.WORK_NAME,
