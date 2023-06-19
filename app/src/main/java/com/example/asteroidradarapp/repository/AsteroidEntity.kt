@@ -13,14 +13,14 @@ import com.example.asteroidradarapp.Asteroid
 @Dao
 interface AsteroidDao {
 
-    @Query("select * from asteroids_table ORDER BY date(closeApproachDate) ASC")
-    fun getAsteroids(): LiveData<List<AsteroidEntity>>
+    @Query("select * from asteroids_table WHERE closeApproachDate >= :date ORDER BY date(closeApproachDate) ASC")
+    fun getAsteroids(date: String): LiveData<List<AsteroidEntity>>
 
     @Query("SELECT * FROM asteroids_table WHERE closeApproachDate = :date ORDER BY date(closeApproachDate) ASC")
-    fun getTodaysAsteroids(date: String): LiveData<List<Asteroid>>
+    fun getTodaysAsteroids(date: String): LiveData<List<AsteroidEntity>>
 
     @Query("SELECT * FROM asteroids_table WHERE closeApproachDate >= :date ORDER BY date(closeApproachDate) ASC")
-    fun getAsteroidsFromToday(date: String): LiveData<List<Asteroid>>
+    fun getAsteroidsFromToday(date: String): LiveData<List<AsteroidEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg asteroids: AsteroidEntity)

@@ -53,5 +53,11 @@ class AsteroidApplication : Application() {
             repeatingRequest
         )
 
+        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+            DeleteOlderDataWork.WORK_NAME_DELETE,
+            ExistingPeriodicWorkPolicy.KEEP,
+            repeatingRequest
+        )
+
     }
 }

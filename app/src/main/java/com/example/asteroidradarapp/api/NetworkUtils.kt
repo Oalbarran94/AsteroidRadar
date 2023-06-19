@@ -3,6 +3,7 @@ package com.example.asteroidradarapp.api
 import android.util.Log
 import com.example.asteroidradarapp.Asteroid
 import com.example.asteroidradarapp.Constants
+import com.example.asteroidradarapp.Constants.DEFAULT_ONE_DAY_FROM_TODAY
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -66,4 +67,10 @@ fun getLastDayToSearch() : String {
 
 fun getTodayDateToSearch() : String {
     return SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault()).format(Calendar.getInstance().time)
+}
+
+fun getNextDayFromToday(): String {
+    val calendar = Calendar.getInstance()
+    calendar.add(Calendar.DAY_OF_YEAR, DEFAULT_ONE_DAY_FROM_TODAY)
+    return SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault()).format(calendar.time)
 }

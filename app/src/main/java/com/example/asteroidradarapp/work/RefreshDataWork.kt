@@ -19,10 +19,8 @@ class RefreshDataWork(appContext: Context, params: WorkerParameters): CoroutineW
         val database = getDatabase(applicationContext)
         val repository = AsteroidRepository(database)
 
-        repository.refreshAsteroids()
-
         return try {
-            repository.refreshAsteroids()
+            repository.getNextSevenDaysAsteroids()
             Result.success()
         } catch (exception: HttpException){
             Result.retry()

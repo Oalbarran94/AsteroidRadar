@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -21,12 +22,18 @@ class AsteroidPrincipalViewModel(application: Application) : AndroidViewModel(ap
     private val database = getDatabase(application)
     private val repository = AsteroidRepository(database)
 
+    val asteroids: MediatorLiveData<List<Asteroid>> = MediatorLiveData()
+    private val todayAsteroids = repository.todaysAsteroids
+    private val weekAsteroids = repository.weekAsteroids
+    private val allSavedAsteroids = repository.asteroids
+
     private val _status = MutableLiveData<AsteroidApiStatus>()
     val status: LiveData<AsteroidApiStatus>
         get() = _status
 
     init {
         _status.value = AsteroidApiStatus.LOADING
+        addSourceToMediatorLiveDataList(todayAsteroids)
         viewModelScope.launch {
             try {
                 repository.refreshAsteroids()
@@ -38,9 +45,6 @@ class AsteroidPrincipalViewModel(application: Application) : AndroidViewModel(ap
             }
         }
     }
-
-    var asteroids: LiveData<List<Asteroid>> = repository.asteroids
-    //var _asteroids: LiveData<List<Asteroid>> = repository.asteroids
 
     val pictureOfDay: LiveData<PictureOfDay> = repository.pictureOfDay
 
@@ -54,6 +58,33 @@ class AsteroidPrincipalViewModel(application: Application) : AndroidViewModel(ap
 
     fun displayAsteroidDetailsComplete() {
         _navigateToSelectedAsteroid.value = null
+    }
+
+    private fun addSourceToMediatorLiveDataList(asteroidsList: LiveData<List<Asteroid>>) {
+        asteroids.addSource(asteroidsList) { asteroidsList ->
+            asteroids.value = asteroidsList
+        }
+    }
+
+    fun onTodayAsteroidsClicked(){
+        removeSource()
+        addSourceToMediatorLiveDataList(todayAsteroids)
+    }
+
+    fun onWeekAsteroidsClicked(){
+        removeSource()
+        addSourceToMediatorLiveDataList(weekAsteroids)
+    }
+
+    fun onSavedAsteroidsClicked(){
+        removeSource()
+        addSourceToMediatorLiveDataList(allSavedAsteroids)
+    }
+
+    private fun removeSource() {
+        asteroids.removeSource(todayAsteroids)
+        asteroids.removeSource(weekAsteroids)
+        asteroids.removeSource(allSavedAsteroids)
     }
 
     class Factory(val app: Application) : ViewModelProvider.Factory {

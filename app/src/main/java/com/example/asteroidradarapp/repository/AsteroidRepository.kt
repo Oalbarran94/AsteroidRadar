@@ -7,6 +7,7 @@ import com.example.asteroidradarapp.Asteroid
 import com.example.asteroidradarapp.Constants
 import com.example.asteroidradarapp.PictureOfDay
 import com.example.asteroidradarapp.api.getLastDayToSearch
+import com.example.asteroidradarapp.api.getNextDayFromToday
 import com.example.asteroidradarapp.api.getTodayDateToSearch
 import com.example.asteroidradarapp.api.parseAsteroidsJsonResult
 import com.example.asteroidradarapp.network.AsteroidApi
@@ -18,7 +19,15 @@ import java.lang.Exception
 
 class AsteroidRepository(private val database: AsteroidDatabase) {
 
-    val asteroids: LiveData<List<Asteroid>> = Transformations.map(database.asteroidDao.getAsteroids()) {
+    val asteroids: LiveData<List<Asteroid>> = Transformations.map(database.asteroidDao.getAsteroids(getTodayDateToSearch())) {
+        it.asDomainModel()
+    }
+
+    val todaysAsteroids: LiveData<List<Asteroid>> = Transformations.map(database.asteroidDao.getTodaysAsteroids(getTodayDateToSearch())){
+        it.asDomainModel()
+    }
+
+    val weekAsteroids: LiveData<List<Asteroid>> = Transformations.map(database.asteroidDao.getAsteroidsFromToday(getTodayDateToSearch())){
         it.asDomainModel()
     }
 
@@ -43,7 +52,25 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
             } catch (e: Exception){
                 Log.e("AsteroidRepository", "Error saving or getting asteroids: $e")
             }
+        }
+    }
 
+    suspend fun getNextSevenDaysAsteroids(){
+        withContext(Dispatchers.IO){
+            try{
+                val asteroids = parseAsteroidsJsonResult(
+                    JSONObject(
+                        AsteroidApi.retrofitService.getAsteroidsData(
+                            getNextDayFromToday(),
+                            getLastDayToSearch(),
+                            Constants.API_KEY
+                        ).string()
+                    )
+                )
+                database.asteroidDao.insertAll(*asteroids.asDatabaseModel())
+            } catch (e: Exception){
+                Log.e("AsteroidRepository", "Error saving or getting asteroids: $e")
+            }
         }
     }
 
